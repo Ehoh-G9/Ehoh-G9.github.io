@@ -1,0 +1,333 @@
+
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You 💗</title>
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --ink:#111;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background: radial-gradient(1200px 600px at 50% 30%, #ffffff 0%, var(--bg) 60%, #f5f1ea 100%);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Thai", Arial;
+      color:#222;
+      overflow:hidden;
+    }
+
+    .wrap{
+      width:min(960px, 92vw);
+      height:min(560px, 70vh);
+      position:relative;
+      border-radius:28px;
+      background: rgba(255,255,255,.6);
+      box-shadow: 0 18px 60px rgba(0,0,0,.08);
+      backdrop-filter: blur(6px);
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.06);
+    }
+
+    .hint{
+      position:absolute;
+      left:18px; top:14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      z-index:5;
+      font-weight:700;
+      letter-spacing:.2px;
+      opacity:.9;
+      user-select:none;
+    }
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.7);
+      border:1px solid rgba(0,0,0,.06);
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .btn{
+      cursor:pointer;
+      border:0;
+      font-weight:800;
+      border-radius:999px;
+      padding:10px 14px;
+      background:#111;
+      color:#fff;
+      box-shadow:0 10px 24px rgba(0,0,0,.15);
+      transition:.15s transform;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    /* SVG drawing */
+    svg{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .stroke{
+      fill:none;
+      stroke: var(--ink);
+      stroke-width:6;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+
+      /* key for drawing effect */
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw 2.2s ease forwards;
+    }
+    .stroke.thin{ stroke-width:5; }
+    .stroke.soft{ stroke: rgba(17,17,17,.92); }
+
+    /* each path can have its own delay */
+    .d1{ animation-delay: .15s; }
+    .d2{ animation-delay: .35s; }
+    .d3{ animation-delay: .55s; }
+    .d4{ animation-delay: .8s;  }
+    .d5{ animation-delay: 1.05s; }
+    .d6{ animation-delay: 1.35s; }
+    .d7{ animation-delay: 1.55s; }
+    .d8{ animation-delay: 1.85s; }
+
+    @keyframes draw{
+      to{ stroke-dashoffset: 0; }
+    }
+
+    /* Heart emoji field */
+    .hearts{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:3;
+    }
+    .heart{
+      position:absolute;
+      transform: translate(-50%, -50%) scale(.2);
+      opacity:0;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,.10));
+      animation: pop .45s ease forwards;
+      font-size: 26px;
+      user-select:none;
+    }
+    @keyframes pop{
+      to{
+        opacity:1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    /* Small floating hearts (ambient) */
+    .float{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+      opacity:.55;
+    }
+    .bubble{
+      position:absolute;
+      bottom:-40px;
+      font-size:18px;
+      animation: rise linear forwards;
+      filter: blur(.0px);
+    }
+    @keyframes rise{
+      to{
+        transform: translateY(-120vh) translateX(var(--dx, 0px));
+        opacity:0;
+      }
+    }
+
+    /* Subtitle */
+    .subtitle{
+      position:absolute;
+      left:22px;
+      bottom:18px;
+      z-index:5;
+      background: rgba(255,255,255,.75);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:18px;
+      padding:10px 14px;
+      max-width:min(520px, 86%);
+      line-height:1.25;
+      font-weight:800;
+    }
+    .subtitle small{
+      display:block;
+      margin-top:4px;
+      font-weight:700;
+      opacity:.75;
+    }
+
+    @media (max-width:520px){
+      .subtitle{ font-size:14px; }
+      .heart{ font-size:22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="wrap">
+    <div class="hint">
+      <div class="pill" id="toLabel">To: You 💗</div>
+      <button class="btn" id="replayBtn">Replay</button>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+    <div class="float" id="float"></div>
+
+    <!-- SVG scene: simple doodle + handwriting -->
+    <svg viewBox="0 0 960 560" aria-label="romantic doodle">
+      <!-- character (left) -->
+      <!-- head + body outline -->
+      <path class="stroke soft d1" d="M165 320
+        C120 320, 92 288, 92 246
+        C92 190, 130 150, 185 150
+        C242 150, 280 190, 280 246
+        C280 290, 248 320, 210 320
+        Z" />
+      <path class="stroke soft d2" d="M120 315
+        C112 362, 120 450, 185 450
+        C250 450, 260 366, 250 315" />
+      <!-- legs -->
+      <path class="stroke d3" d="M150 450 C150 495, 120 505, 118 530" />
+      <path class="stroke d3" d="M220 450 C220 495, 250 505, 252 530" />
+      <!-- face -->
+      <path class="stroke thin d4" d="M150 245 C152 245, 154 247, 154 249 C154 251, 152 253, 150 253 C148 253, 146 251, 146 249 C146 247, 148 245, 150 245 Z" />
+      <path class="stroke thin d4" d="M220 245 C222 245, 224 247, 224 249 C224 251, 222 253, 220 253 C218 253, 216 251, 216 249 C216 247, 218 245, 220 245 Z" />
+      <path class="stroke thin d5" d="M165 270 C178 283, 195 283, 206 270" />
+      <!-- blush -->
+   
+      <path class="stroke thin d5" d="M214 268 C226 260, 231 260, 242 268" /> -->
+
+      <!-- arm pointing -->
+      <path class="stroke d6" d="M250 340 C300 320, 330 300, 360 290" />
+      <path class="stroke d6" d="M360 290 C380 282, 395 285, 410 300" />
+      <path class="stroke thin d7" d="M355 288 C352 305, 360 314, 378 315" />
+
+
+    </svg>
+
+    <div class="subtitle" id="subtitle">
+      รอยยิ้มเธอน่ารักจังเลยนะ 
+    </div>
+  </div>
+
+  <script>
+    const heartsEl = document.getElementById("hearts");
+    const floatEl  = document.getElementById("float");
+    const replayBtn = document.getElementById("replayBtn");
+    const toLabel = document.getElementById("toLabel");
+
+    // --- set name from querystring (?to=Jenny) ---
+    const params = new URLSearchParams(location.search);
+    const to = params.get("to");
+    if (to) toLabel.textContent = `To: ${to} 💗`;
+
+    // --- build a big heart shape using equation sampling ---
+    // Heart implicit equation:
+    // (x^2 + y^2 - 1)^3 - x^2*y^3 <= 0
+    function generateHeartPoints(cols = 26, rows = 22) {
+      const pts = [];
+      for (let j = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          // map to [-1.3..1.3] and [-1.2..1.2]
+          const x = (i / (cols - 1)) * 2.6 - 1.3;
+          const y = (j / (rows - 1)) * 2.4 - 1.2;
+          const a = x*x + y*y - 1;
+          const f = a*a*a - x*x * y*y*y;
+
+          if (f <= 0) {
+            // keep points that are "inside" heart
+            pts.push({x, y});
+          }
+        }
+      }
+      return pts;
+    }
+
+    function clearAll() {
+      heartsEl.innerHTML = "";
+      floatEl.innerHTML = "";
+    }
+
+    function spawnEmojiHeartField() {
+      // position heart field around right side of scene
+      const pts = generateHeartPoints(28, 24);
+
+      // sort so it "draws" from top-left-ish to bottom
+      pts.sort((p1, p2) => (p1.y - p2.y) || (p1.x - p2.x));
+
+      // place within container pixels
+      const W = heartsEl.clientWidth;
+      const H = heartsEl.clientHeight;
+
+      const centerX = W * 0.72;
+      const centerY = H * 0.44;
+
+      const scale = Math.min(W, H) * 0.18; // overall size
+      const emoji = "❤️"; // เปลี่ยนได้: 💗 💖 💘 🧡
+
+      pts.forEach((p, idx) => {
+        const s = document.createElement("span");
+        s.className = "heart";
+        s.textContent = emoji;
+
+        // map point -> pixel
+        const x = centerX + p.x * scale;
+        const y = centerY + p.y * scale;
+
+        s.style.left = x + "px";
+        s.style.top  = y + "px";
+        s.style.animationDelay = (idx * 0.03 + 1.2) + "s"; // wait a bit after writing
+        heartsEl.appendChild(s);
+      });
+    }
+
+    function spawnAmbientHearts() {
+      const W = floatEl.clientWidth;
+      const count = 18;
+
+      for (let i = 0; i < count; i++) {
+        const b = document.createElement("div");
+        b.className = "bubble";
+        b.textContent = (Math.random() > 0.5) ? "💗" : "❤️";
+        b.style.left = (Math.random() * W) + "px";
+        b.style.opacity = (0.35 + Math.random() * 0.55).toFixed(2);
+        b.style.setProperty("--dx", ((Math.random() * 160) - 80) + "px");
+        b.style.animationDuration = (6 + Math.random() * 5).toFixed(2) + "s";
+        b.style.animationDelay = (0.2 + Math.random() * 2).toFixed(2) + "s";
+        floatEl.appendChild(b);
+      }
+    }
+
+    // --- restart SVG stroke animations by cloning SVG ---
+    function restartSVG() {
+      const wrap = document.getElementById("wrap");
+      const oldSvg = wrap.querySelector("svg");
+      const clone = oldSvg.cloneNode(true);
+      oldSvg.replaceWith(clone);
+    }
+
+    function playAll() {
+      clearAll();
+      restartSVG();
+      spawnEmojiHeartField();
+      spawnAmbientHearts();
+    }
+
+    replayBtn.addEventListener("click", playAll);
+    // auto play
+    playAll();
+  </script>
+</body>
+</html>
